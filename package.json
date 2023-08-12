@@ -1,6 +1,6 @@
 {
   "name": "nrlint-plugin-rules-english-node-name",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "English node name rule plugin for nrlint",
   "scripts": {
     "build": "webpack -c ./webpack.config.js"
