@@ -1,26 +1,19 @@
 module.exports = {
-    "example-rule": {
+    "english-node-name": {
         meta: {
             type: "suggestion",
             severity: "warn",
             docs: {
-                description: "number of function node < 10"
-            },
-            options: {}
-        },
-        create: function(context, ruleConfig) {
-            let maxFunc = 10;
-            if ('maxFunc' in ruleConfig) {
-                maxFunc = ruleConfig.maxFunc
+                description: "全てのノードの名前を英語のみにする"
             }
+        },
+        create: function (context, ruleConfig) {
             return {
-                flow: function(flow) {
-                    const numFunc = 
-                        [...flow.nodes.values()].filter((e)=>e.type=="function").length;
-                    if (numFunc > maxFunc) {
+                "node": function (node) {
+                    if (!node.config.name.match(/^[ -~]+$/)) {
                         context.report({
-                            location: [flow.id],
-                            message: "too many function nodes in a flow"
+                            location: [node.id],
+                            message: "ノード名は英数字、または記号である必要があります"
                         })
                     }
                 }

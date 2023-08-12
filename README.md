@@ -1,46 +1,67 @@
-# nrlint-plugin-rules-example
-Example rule plugin for nrlint.
+# nrlint-plugin-rules-english-node-name
+英語のノード名のみ許可するフローリンター用のカスタムルール
 
-This rule counts the number of function nodes in a flow,
-and emit warning when the number > 10.
+Node-REDフローエディタにインストールすると、以下のように英語のノード名でない場合に、警告を表示します。
 
-## Usage
+![](https://github.com/kazuhitoyokoi/nrlint-plugin-rules-english-node-name/blob/main/editor.png)
 
-### 1. install 
-```sh
-% gh repo clone k-toumura/nrlint-plugin-rules-example
-% cd nrlint-plugin-rules-example
-% npm install
-% npm run build
-% cd ~/.node-red
-% npm install <path-to-this-plugin>
-% npm install -g <path-to-this-plugin>    # need to use from CLI
+グローバルメンバでフロー開発を行うプロジェクトにて、日本メンバに日本語を使ってほしくない場合に便利です。
+
+## フローエディタへのインストール方法
+1. Node-REDのホームディレクトリへ移動
+```
+cd ~/.node-red
 ```
 
-### 2. configure
+2. フローリンターをインストール
+```
+npm install nrlint
+```
 
-add following setting to ~/.node-red/.nrlintrc.js
-```javascript
-module.export = {
+3. カスタムルールをインストール
+```
+npm install nrlint-plugin-rules-english-node-name
+```
+
+4. Node-REDを起動
+```
+node-red
+```
+
+### CLI版フローリンターでの利用方法
+
+1. フローリンターをインストール
+```
+npm install -g nrlint
+```
+
+2. カスタムルールをインストール
+```
+npm install -g nrlint-plugin-rules-english-node-name
+```
+
+3. 下記を設定ファイル`.nrlintrc.js`に記載
+```
+module.exports = {
     "plugins": [
-        "nrlint-plugin-rules-example"
+        "nrlint-plugin-rules-english-node-name"
     ],
     "rules": {
-        "example-rule": true,
-        // ...
+        "english-node-name": true
     }
 }
 ```
 
-### 3. run
-
-Restart Node-RED, or
-```sh
-% npx nrlint myFlowFile.json
+4. CLI版フローリンターを実行
 ```
-in `~/.node-red`.
-
-
-
-
-
+nrlint flows.json
+```
+-> flows.json内のノードに日本語の名前を付けていると、以下の様な警告メッセージが出力される
+```
+╔══════════════════╤══════════╤══════════════════════════════════════════════════╤═══════════════════╗
+║ Object ID        │ Severity │ Message                                          │ Rule              ║
+╟──────────────────┼──────────┼──────────────────────────────────────────────────┼───────────────────╢
+║ 33cf4f761bc66b31 │ warn     │ ノード名は英数字、または記号である必要があります         │ english-node-name ║
+╚══════════════════╧══════════╧══════════════════════════════════════════════════╧═══════════════════╝
+✖ 1 problems (0 errors, 1 warnings)
+```

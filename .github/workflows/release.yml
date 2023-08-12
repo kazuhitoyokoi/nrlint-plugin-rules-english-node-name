@@ -1,0 +1,19 @@
+name: Release custom rule plugin for nrlint
+on:
+  release:
+    types: [created]
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          registry-url: https://registry.npmjs.org/
+      - run: |
+          npm install
+          npm run build
+          cat package.json | jq ".repository.type|=\"git\"|.repository.url|=\"https://github.com/$GITHUB_REPOSITORY.git\"" > tmp; mv tmp package.json
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
